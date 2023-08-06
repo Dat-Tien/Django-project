@@ -65,7 +65,7 @@ class LessonTestCase(TestCase):
             image="sampleimage.jpg",
             description="sample description",
             pub_date=date.today(),
-            instructors=selff.user,
+            instructors=self.user,
             users=self.user,
             total_enrollment=2,
         )
