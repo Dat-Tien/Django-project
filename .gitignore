@@ -6,7 +6,7 @@ pyvenv.cfg
 __pycache__/
 migrations/
 *.sqlite3
-LICENSE
-*/Procfile
-*/manifest.yml
+*LICENSE
+*Procfile
+*manifest.yml
 

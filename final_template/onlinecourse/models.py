@@ -104,13 +104,15 @@ class Question(models.Model):
     # Foreign key to lesson
     lesson_id = models.ForeignKey(Lesson, on_delete=models.CASCADE)
     # question text
-    question_text = models.CharField(max_length=100, default="")
+    question_text = models.CharField(max_length=500, default="", null=False)
     # question grade/mark
     question_grade = models.FloatField(default=0.0)
-    
+    # Has a One-To-Many (or Many-To-Many if you want to reuse questions) relationship with course
+    course = models.ForeignKey(Course, default=None, on_delete=models.CASCADE)
+
     def __str__(self):
         return "question: " + self.question_text + ","  +\
-               " grade: " + self.grade
+               " grade: " + str(self.question_grade)
     
     # <HINT> A sample model method to calculate if learner get the score of the question 
     def isGetScore(self, selected_ids):
@@ -121,7 +123,7 @@ class Question(models.Model):
             ret = True
         else:
             ret = False
-        return ret
+        return ret    
 
 #  <HINT> Create a Choice Model with:
     # Used to persist choice content for a question
@@ -131,10 +133,9 @@ class Question(models.Model):
     # Other fields and methods you would like to design
 class Choice(models.Model):
     question_id = models.ForeignKey(Question, on_delete=models.CASCADE)
-    choice_text = models.CharField(max_length= 500, default= "")
+    choice_text = models.CharField(max_length= 500, default= "", null=False)
     is_correct = models.BooleanField(default=False)
-    remark = models.CharField(max_length=100, default= "")
-
+    
     def __str__(self):
         return "Choice text " + self.choice_text + \
                " is " + str(self.is_correct)
@@ -145,6 +146,7 @@ class Choice(models.Model):
 # One choice could belong to multiple submissions
 class Submission(models.Model):
    enrollment = models.ForeignKey(Enrollment, on_delete=models.CASCADE)
-   chocies = models.ManyToManyField(Choice)
+   choices = models.ManyToManyField(Choice)
+  
 #    Other fields and methods you would like to design
 
