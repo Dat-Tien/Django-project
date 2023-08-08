@@ -112,16 +112,16 @@ def enroll(request, course_id):
          # Redirect to show_exam_result with the submission id
 def submit(request, course_id):
     if request.method == "POST":
-        course = get_object_or_404(Course, pk=course_id)
         user = request.user
+        course = get_object_or_404(Course, pk=course_id)
         enrollment = get_object_or_404(Enrollment,user=user,course=course)
         submission = Submission.objects.create(enrollment=enrollment)
-        choiceObj = extract_answers(request)
-        for choice in choiceObj:
-            c = Choice.objects.filter(id=int(choice)).get()
-            submission.choices.add(c)
+        choiceId = extract_answers(request)
+        for choice in choiceId:
+            choiceObj = get_object_or_404(Choice, pk=int(choice))
+            submission.choices.add(choiceObj)
         submission.save()
-        return HttpResponseRedirect(reverse(viewname='onlinecourse:show_exam_result', args=(course.id, submission.id,)))
+        return HttpResponseRedirect(reverse(viewname='onlinecourse:show_exam_result', args=(course.id, submission.id)))
 
 def extract_answers(request):
     submitted_anwsers = []
@@ -143,7 +143,7 @@ def show_exam_result(request, course_id, submission_id):
     if request.method == "GET":
         course = get_object_or_404(Course, pk=course_id)
         submission = get_object_or_404(Submission, pk= submission_id)
-        selected_ids = submission.choices.all().values_list('id',flat=True) 
+        selected_ids = submission.choices.all().values_list('id',flat=True)
         context={}
         total_score = 0
         for question in course.question_set.all():

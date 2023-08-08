@@ -102,13 +102,13 @@ class Enrollment(models.Model):
     # Other fields and methods you would like to design
 class Question(models.Model):
     # Foreign key to lesson
-    lesson_id = models.ForeignKey(Lesson, on_delete=models.CASCADE)
+    lesson_id = models.ForeignKey(Lesson, on_delete=models.CASCADE, null=False)
     # question text
     question_text = models.CharField(max_length=500, default="", null=False)
     # question grade/mark
     question_grade = models.FloatField(default=0.0)
     # Has a One-To-Many (or Many-To-Many if you want to reuse questions) relationship with course
-    course = models.ForeignKey(Course, default=None, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, default=None, on_delete=models.CASCADE, null=False)
 
     def __str__(self):
         return "question: " + self.question_text + ","  +\
